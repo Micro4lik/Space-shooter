@@ -74,4 +74,9 @@ public class PlayerController : Singleton<PlayerController>
 
     }
 
+    public void LoadData(Save.EnemySaveData save)
+    {
+        transform.position = new Vector3(save.Position.x, save.Position.y, save.Position.z);
+    }
+
 }

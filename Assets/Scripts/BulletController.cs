@@ -11,4 +11,10 @@ public class BulletController : MonoBehaviour
     {
         transform.position += Vector3.right * Model.BulletForce * Time.deltaTime;
     }
+
+    public void LoadData(Save.EnemySaveData save)
+    {
+        GetComponent<BulletView>().OnDisable();
+        transform.position = new Vector3(save.Position.x, save.Position.y, save.Position.z);
+    }
 }

@@ -10,14 +10,19 @@ public class SaveLoadManager : MonoBehaviour
     private string filePath;
 
     private List<GameObject> EnemySaves = new List<GameObject>();
+    private List<GameObject> BulletsSaves = new List<GameObject>();
 
     public PlayerView pView;
     public LevelView lView;
+    public EnemyView eView;
+
+    public GameObject Player;
 
     // Start is called before the first frame update
     void Start()
     {
         EnemySaves = ManagerPool.instance.enemylist;
+        BulletsSaves = ManagerPool.instance.bulletlist;
         filePath = Application.persistentDataPath + "/save.gamesave";
     }
 
@@ -29,8 +34,10 @@ public class SaveLoadManager : MonoBehaviour
         Save save = new Save();
 
         save.SaveEnemies(EnemySaves);
+        save.SaveBullets(BulletsSaves);
         save.Health = PlayerController.instance.hp;
         save.Score = LevelController.instance.kEnemiew;
+        save.SavePlayer(Player);
 
         bf.Serialize(fs, save);
 
@@ -57,10 +64,22 @@ public class SaveLoadManager : MonoBehaviour
             i++;
         }
 
+        i = 0;
+        foreach (var bullet in save.BulletsData)
+        {
+            BulletsSaves[i].GetComponent<BulletController>().LoadData(bullet);
+            i++;
+        }
+
         PlayerController.instance.hp = save.Health;
         pView.SetHp(save.Health);
         LevelController.instance.kEnemiew = save.Score;
         lView.SetKilledEnemies(LevelController.instance.eToWin - save.Score);
+
+        Player.GetComponent<PlayerController>().LoadData(save.player);
+        
+
+
     }
 }
 
@@ -93,6 +112,10 @@ public class Save
 
     public List<EnemySaveData> EnemiesData = new List<EnemySaveData>();
 
+    public EnemySaveData player;
+
+    public List<EnemySaveData> BulletsData = new List<EnemySaveData>();
+
     public int Score;
     public int Health;
 
@@ -108,4 +131,29 @@ public class Save
 
         }
     }
+
+    public void SaveBullets(List<GameObject> bullets)
+    {
+        foreach (var go in bullets)
+        {
+            var em = go.GetComponent<BulletController>();
+
+            Vec3 pos = new Vec3(go.transform.position.x, go.transform.position.y, go.transform.position.z);
+
+            BulletsData.Add(new EnemySaveData(pos));
+
+        }
+    }
+
+    public void SavePlayer(GameObject pl)
+    {
+
+        var pm = pl.GetComponent<PlayerController>();
+
+        Vec3 pos = new Vec3(pl.transform.position.x, pl.transform.position.y, pl.transform.position.z);
+
+        player.Position = pos;
+        
+    }
+    
 }

@@ -16,7 +16,7 @@ public class BulletView : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void OnDisable()
+    public void OnDisable()
     {
         CancelInvoke();
     }

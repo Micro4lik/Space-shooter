@@ -6,7 +6,7 @@ public class EnemyController : MonoBehaviour
 {
     private Transform Player;
     private Vector3 normalizeDirection;
-    private float speed = 2f;
+    private float speed = 10f;
 
     private EnemyModel Model;
 
@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
 
     public void LoadData(Save.EnemySaveData save)
     {
+        GetComponent<EnemyView>().OnDisable();
         transform.position = new Vector3(save.Position.x, save.Position.y, save.Position.z);
     }
 }

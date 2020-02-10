@@ -20,7 +20,7 @@ public class EnemyView : MonoBehaviour
         SetRandomPosition();
     }
 
-    void OnDisable()
+    public void OnDisable()
     {
         CancelInvoke();
     }
