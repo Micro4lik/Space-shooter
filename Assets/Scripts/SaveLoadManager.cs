@@ -18,8 +18,27 @@ public class SaveLoadManager : MonoBehaviour
 
     public GameObject Player;
 
+    public bool isFirstPlay = false;
+
     // Start is called before the first frame update
     void Start()
+    {
+        Debug.Log(PlayerPrefs.GetInt("IsFirstRun"));
+
+        if (PlayerPrefs.GetInt("IsFirstRun") == 0)
+        {
+
+        }
+        else if (PlayerPrefs.GetInt("IsFirstRun") == 1)
+        {
+            LoadGame();
+        }
+
+        PlayerPrefs.SetInt("IsFirstRun", 1);
+        
+    }
+
+    void Awake()
     {
         EnemySaves = ManagerPool.instance.enemylist;
         BulletsSaves = ManagerPool.instance.bulletlist;
@@ -81,6 +100,13 @@ public class SaveLoadManager : MonoBehaviour
 
 
     }
+
+    void OnApplicationQuit()
+    {
+        SaveGame();
+        Debug.Log("OnApplicationQuit");
+    }
+
 }
 
 [System.Serializable]

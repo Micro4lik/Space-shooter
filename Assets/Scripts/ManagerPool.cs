@@ -21,7 +21,7 @@ public class ManagerPool : Singleton<ManagerPool>
         }
     }
 
-    void Start()
+    void Awake()
     {
         initializePool(15, bulletPrefab, bulletlist);
         initializePool(20, enemyPrefab, enemylist);

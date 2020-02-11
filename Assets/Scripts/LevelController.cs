@@ -39,6 +39,9 @@ public class LevelController : Singleton<LevelController>
 
     void NextLevel()
     {
+
+        PlayerPrefs.SetInt("IsFirstRun", 0);
+
         switch (Model.Level)
         {
             case 1:
