@@ -1,20 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Debug = UnityEngine.Debug;
 
 public class LevelController : Singleton<LevelController>
 {
     public TextMeshProUGUI health;
     public TextMeshProUGUI enemies;
+    public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI buttonNextLevel;
 
-    private LevelModel Model = new LevelModel(1, 10);
-    private LevelView View = new LevelView();
+    public Button[] LevelButtons;
+
+    public LevelModel Model = new LevelModel(1, 10);
+    public LevelView View;
 
     public int kEnemiew;
     public int currentEnemies;
     public int eToWin;
+
+    public int Level;
+
+    public int unlockedLevels;
 
     public void ChangeEnemyDestoyed()
     {
@@ -24,8 +34,29 @@ public class LevelController : Singleton<LevelController>
 
         if (kEnemiew == eToWin)
         {
-            Model.Level += 1;
-            NextLevel();
+            Level += 1;
+            ChangeLevel();
+            //PlayerPrefs.SetInt("IsFirstRun", 0);
+            View.ChangeGameOverText("Victory!");
+            if (Level == 3)
+            {
+                View.ChangeButtonText("Retry");
+            }
+            else
+            {
+                View.ChangeButtonText("Next level");
+            }
+
+            
+            if (Level == 2 && unlockedLevels < 2)
+            {
+                unlockedLevels = 2;
+            }
+            else if (Level == 3 && unlockedLevels < 3)
+            {
+                unlockedLevels = 3;
+            }
+
             GameManager.instance.GameOver();
         }
     }
@@ -33,36 +64,34 @@ public class LevelController : Singleton<LevelController>
     // Start is called before the first frame update
     void Start()
     {
+        Level = Model.Level;
         kEnemiew = Model.KilledEnemies;
         eToWin = Model.EnemiesToWin;
+
+        unlockedLevels = 1;
     }
-
-    void NextLevel()
+    
+    public void ChangeLevel()
     {
-
-        PlayerPrefs.SetInt("IsFirstRun", 0);
-
-        switch (Model.Level)
+        switch (Level)
         {
             case 1:
                 Debug.Log("Load level 1");
-                Model.EnemiesToWin = 10;
+                eToWin = 10;
                 break;
             case 2:
                 Debug.Log("Load level 2");
-                Model.EnemiesToWin = 20;
+                eToWin = 20;
                 break;
             case 3:
                 Debug.Log("Load level 3");
-                Model.EnemiesToWin = 30;
+                eToWin = 30;
                 break;
             default:
                 Debug.Log("default");
                 break;
         }
-
-        View.SetKilledEnemies(Model.EnemiesToWin);
-
+        
     }
 
 }

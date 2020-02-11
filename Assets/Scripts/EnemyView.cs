@@ -33,7 +33,7 @@ public class EnemyView : MonoBehaviour
         SetRandomPosition();
     }
 
-    void SetRandomPosition()
+    public void SetRandomPosition()
     {
         randY = Random.Range(-6.5f, 6.5f);
         Model.PositionY = randY;

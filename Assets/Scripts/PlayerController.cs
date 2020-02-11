@@ -1,22 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : Singleton<PlayerController>
 {
     private PlayerModel Model = new PlayerModel(3, 5, 1);
-    private PlayerView View = new PlayerView();
+    public PlayerView View;
 
     private Rigidbody2D rb;
     private Vector2 movement;
 
     public int hp;
+
+    public Vector3 PlayerPosition;
+    public GameObject Player;
     
     private List<GameObject> bulletlist;
 
     // Start is called before the first frame update
     void Start()
     {
+        Player = gameObject;
+        PlayerPosition = transform.position;
         hp = Model.Hp;
         bulletlist = ManagerPool.instance.bulletlist;
 
@@ -28,11 +34,11 @@ public class PlayerController : Singleton<PlayerController>
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Shoot();
-        }
+           
+            if (Input.GetButtonDown("Fire1") && !EventSystem.current.IsPointerOverGameObject())
+            {
+                Shoot();
+            }
     }
 
     void FixedUpdate()
@@ -48,15 +54,19 @@ public class PlayerController : Singleton<PlayerController>
 
     void Shoot()
     {
-        for (int i = 0; i < bulletlist.Count; i++)
+        if (!GameManager.instance.isPause)
         {
-            if (!bulletlist[i].activeInHierarchy)
+            for (int i = 0; i < bulletlist.Count; i++)
             {
-                bulletlist[i].transform.position = firePoint.position;
-                bulletlist[i].SetActive(true);
-                break;
+                if (!bulletlist[i].activeInHierarchy)
+                {
+                    bulletlist[i].transform.position = firePoint.position;
+                    bulletlist[i].SetActive(true);
+                    break;
+                }
             }
         }
+
     }
 
     public void ReceiveDamage(int damage)
@@ -64,8 +74,8 @@ public class PlayerController : Singleton<PlayerController>
         if (hp > 0)
         {
             hp = hp - damage;
+
             View.SetHp(hp);
-            Debug.Log(hp);
         }
         if (hp == 0)
         {

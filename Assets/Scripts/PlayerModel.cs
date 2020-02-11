@@ -2,18 +2,11 @@
 
 public class PlayerModel
 {
-    public int NormalizedHp
-    {
-        get { return Hp / MaxHp; }
-    }
+    public int Hp = 3;
+    public int MaxHp = 3;
 
-    //public bool IsHpChanged { get; private set; }
-
-    public int Hp = 3; //{ get; set; }
-    public int MaxHp = 3; //{ get; set; }
-
-    public float Speed = 5f; //{ get; set; }
-    public int Damage = 1; //{ get; set; }
+    public float Speed = 5f;
+    public int Damage = 1;
 
     public int winCondition = 10;
 
@@ -25,26 +18,4 @@ public class PlayerModel
         Damage = damage;
     }
 
-    public float GetSpeed()
-    {
-        return Speed;
-    }
-
-    //действует в начале каждого кадра, в конце каждого кадра затирается
-    //public void LateUpdate()
-    //{
-    //    IsHpChanged = false;
-    //}
-
-    //public UnityAction<int> OnHealthChanged;
-
-    /*public void ReceiveDamage(int damage)
-    {
-        Hp = Hp - damage;
-        //IsHpChanged = true;
-        if (OnHealthChanged != null)
-        {
-            OnHealthChanged(NormalizedHp);
-        }
-    }*/
 }

@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : Singleton<EnemyController>
 {
     private Transform Player;
     private Vector3 normalizeDirection;
     private float speed = 10f;
-
-    private EnemyModel Model;
-
+    
     void Start()
     {
         Player = PlayerController.instance.transform;

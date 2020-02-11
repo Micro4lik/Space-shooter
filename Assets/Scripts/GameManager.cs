@@ -7,9 +7,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
-    public PlayerModel Model;
-
     public LevelController levelController;
+    public PlayerController playerController;
+    public EnemyController enemyController;
+    public ManagerPool managerPool;
 
     public GameObject GameOverPopup;
 
@@ -18,16 +19,23 @@ public class GameManager : Singleton<GameManager>
     public float spawnRate = 0.5f;
     
     private List<GameObject> enemylist;
+
+    public bool isPause;
     
+
     void Start()
     {
-        levelController = new LevelController();
+        levelController = LevelController.instance;
+        playerController = PlayerController.instance;
+        enemyController = EnemyController.instance;
+        managerPool = ManagerPool.instance;
 
         KilledEnemies = 0;
 
         enemylist = ManagerPool.instance.enemylist;
 
         StartCoroutine(EnemySpawner(spawnRate));
+
     }
 
     IEnumerator EnemySpawner(float time)
@@ -46,9 +54,15 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public void Retry()
+    public void PauseGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        isPause = true;
+        Time.timeScale = 0;
+    }
+
+    public void UnpauseGame()
+    {
+        isPause = false;
         Time.timeScale = 1;
     }
 
@@ -58,9 +72,53 @@ public class GameManager : Singleton<GameManager>
         GameOverPopup.SetActive(true);
     }
 
-    void NextLevel()
+    public void QuitGame()
     {
-        Retry();
+        Application.Quit();
     }
 
+    public void ChangeLevel(int level)
+    {
+        switch (level)
+            {
+                case 1:
+                    levelController.Level = 1;
+                    break;
+                case 2:
+                    levelController.Level = 2;
+                break;
+                case 3:
+                    levelController.Level = 3;
+                break;
+                default:
+                    Debug.Log("default");
+                    break;
+            }
+    }
+
+    public void InitializeNewLevel()
+    {
+        Time.timeScale = 1;
+
+        levelController.ChangeLevel();
+
+        playerController.gameObject.transform.position = playerController.PlayerPosition;
+        for (int i = 0; i < enemylist.Count; i++)
+        {
+                enemylist[i].SetActive(false);
+                enemylist[i].GetComponent<EnemyView>().SetRandomPosition();
+        }
+        for (int i = 0; i < managerPool.bulletlist.Count; i++)
+        {
+            managerPool.bulletlist[i].SetActive(false);
+        }
+        levelController.View.SetKilledEnemies(LevelController.instance.eToWin);
+        playerController.View.SetHp(3);
+
+        playerController.hp = 3;
+        levelController.kEnemiew = 0;
+        
+        levelController.View.ChangeLevelStateButtons();
+    }
+    
 }

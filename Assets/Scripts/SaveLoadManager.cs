@@ -12,10 +12,6 @@ public class SaveLoadManager : MonoBehaviour
     private List<GameObject> EnemySaves = new List<GameObject>();
     private List<GameObject> BulletsSaves = new List<GameObject>();
 
-    public PlayerView pView;
-    public LevelView lView;
-    public EnemyView eView;
-
     public GameObject Player;
 
     public bool isFirstPlay = false;
@@ -23,8 +19,6 @@ public class SaveLoadManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(PlayerPrefs.GetInt("IsFirstRun"));
-
         if (PlayerPrefs.GetInt("IsFirstRun") == 0)
         {
 
@@ -51,12 +45,17 @@ public class SaveLoadManager : MonoBehaviour
         FileStream fs = new FileStream(filePath, FileMode.Create);
 
         Save save = new Save();
-
+        
         save.SaveEnemies(EnemySaves);
         save.SaveBullets(BulletsSaves);
         save.Health = PlayerController.instance.hp;
+        save.EnemiesTowin = LevelController.instance.eToWin;
         save.Score = LevelController.instance.kEnemiew;
         save.SavePlayer(Player);
+
+        save.Level = LevelController.instance.Level;
+
+        save.UnlockedLevels = LevelController.instance.unlockedLevels;
 
         bf.Serialize(fs, save);
 
@@ -76,6 +75,8 @@ public class SaveLoadManager : MonoBehaviour
         Save save = (Save)bf.Deserialize(fs);
         fs.Close();
 
+        LevelController.instance.Level = save.Level;
+
         int i = 0;
         foreach (var enemy in save.EnemiesData)
         {
@@ -91,13 +92,17 @@ public class SaveLoadManager : MonoBehaviour
         }
 
         PlayerController.instance.hp = save.Health;
-        pView.SetHp(save.Health);
+        PlayerController.instance.View.SetHp(save.Health);
         LevelController.instance.kEnemiew = save.Score;
-        lView.SetKilledEnemies(LevelController.instance.eToWin - save.Score);
+        LevelController.instance.eToWin = save.EnemiesTowin;
+        LevelController.instance.View.SetKilledEnemies(save.EnemiesTowin - save.Score);
+
+        
+        LevelController.instance.unlockedLevels = save.UnlockedLevels;
 
         Player.GetComponent<PlayerController>().LoadData(save.player);
-        
 
+        LevelController.instance.View.ChangeLevelStateButtons();
 
     }
 
@@ -144,6 +149,12 @@ public class Save
 
     public int Score;
     public int Health;
+
+    public int Level;
+
+    public int EnemiesTowin;
+
+    public int UnlockedLevels;
 
     public void SaveEnemies(List<GameObject> enemies)
     {

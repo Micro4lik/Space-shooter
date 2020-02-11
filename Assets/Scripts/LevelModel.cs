@@ -1,6 +1,6 @@
 ﻿public class LevelModel
 {
-    public int Level;
+    public int Level = 1;
     public int EnemiesToWin;
     public int KilledEnemies = 0;
 
