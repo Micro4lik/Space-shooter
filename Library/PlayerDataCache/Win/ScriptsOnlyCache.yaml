@@ -37,7 +37,6 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
-    - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -68,8 +67,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 114
       Script: {instanceID: 11176}
-    - Class: 114
-      Script: {instanceID: 11346}
     - Class: 114
       Script: {instanceID: 11386}
     - Class: 114
@@ -349,7 +346,7 @@ ScriptsOnlyBuild:
     className: ScrollRect
   - hash:
       serializedVersion: 2
-      Hash: 63747e9fa7023db61bdd33bc681633d3
+      Hash: b2433a845c07d7a56f783c38210ddd16
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: SaveLoadManager
@@ -379,7 +376,7 @@ ScriptsOnlyBuild:
     className: RemoteTestResultSender
   - hash:
       serializedVersion: 2
-      Hash: 2603c3eb2fc94c1764bb085ffbe221e8
+      Hash: cc504c955c2e80c2d7b8f0b4eb00a365
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: LevelController
@@ -481,7 +478,7 @@ ScriptsOnlyBuild:
     className: GraphicRaycaster
   - hash:
       serializedVersion: 2
-      Hash: bb522cedba8a87755975a2ee29a4859d
+      Hash: d00fa40407ea488f2a98ef1a1ad969db
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -571,7 +568,7 @@ ScriptsOnlyBuild:
     className: StandaloneInputModule
   - hash:
       serializedVersion: 2
-      Hash: ba0d641c9b0ad4ec23a4152daab334be
+      Hash: d090c64d65df9598c3052640d0fc4a30
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -620,4 +617,4 @@ ScriptsOnlyBuild:
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/Alex/Desktop/sh/Work-project.exe
+  playerPath: C:/Users/Alex/Desktop/space_shooter/Work-project.exe
